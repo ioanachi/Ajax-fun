@@ -15,13 +15,6 @@ $(document).ready(function() {
   var textArea = $("textarea");
   var textAr;
   var optiune = $('.dropdownx');
-
-
-
-
-
-
-
   radioBtn.click(function() {
     valRBtn = $(this).val();
   });
@@ -70,11 +63,11 @@ $(document).ready(function() {
   });
 
   buttOn3.click(function() {
-    console.log(gay.is(':checked'),'gay');
+    console.log(gay.is(':checked'), 'gay');
     if (gay.is(':checked')) {
       gaY = "yes";
-    }else {
-        gaY= "nO";
+    } else {
+      gaY = "nO";
     }
     var namePost = nM.val();
     console.log(namePost, "namePost");
@@ -107,17 +100,10 @@ $(document).ready(function() {
           result += '<b>' + key + '</b>:' + val + '<br/>';
         });
         resultObj.html(result);
-
-
       },
       error: function() {
         console.log("fail");
       },
     });
-
-
-
-
-
   });
 });
