@@ -10733,7 +10733,7 @@ __webpack_require__(16);
 /* 6 */
 /***/ (function(module, exports) {
 
-module.exports = "<!DOCTYPE html>\r\n<html>\r\n\r\n<head>\r\n  <meta charset=\"utf-8\">\r\n  <title>Second Layout</title>\r\n</head>\r\n\r\n<body>\r\n  <div class=\"container\">\r\n<ul class=\"ullist\">\r\n\r\n</ul>\r\n  </div>\r\n  <div>\r\n    <button class=\"Brequest\"> Request</button>\r\n  </div>\r\n  <div>\r\n    <button class=\"Srequest\">Second Request</button>\r\n  </div>\r\n  <div>\r\n    <button class=\"aPost\">Post something</button>\r\n  </div>\r\n  <div >\r\n    <input type=\"text\" placeholder=\"Name\" class=\"namePost\" name=\"\" value=\"\">\r\n    <input type=\"text\" placeholder=\"Age\" class=\"agePost\" name=\"\" value=\"\">\r\n  </div>\r\n  <div class=\"h2\">\r\n  </div>\r\n<div class=\"h3\">\r\n\r\n</div>\r\n  <script src=\"./dist/commons.js\"></script>\r\n  <script src=\"./dist/bundle.js\"></script>\r\n</body>\r\n\r\n</html>\r\n";
+module.exports = "<!DOCTYPE html>\r\n<html>\r\n\r\n<head>\r\n  <meta charset=\"utf-8\">\r\n  <title>Second Layout</title>\r\n</head>\r\n\r\n<body>\r\n  <div class=\"container\">\r\n    <ul class=\"ullist\">\r\n\r\n    </ul>\r\n  </div>\r\n\r\n  <div>\r\n    <button class=\"Brequest\"> Request</button>\r\n  </div>\r\n  <div>\r\n    <button class=\"Srequest\">Second Request</button>\r\n  </div>\r\n  <div>\r\n    <button class=\"aPost\">Post something</button>\r\n  </div>\r\n\r\n  <div class=\"textbox\">\r\n    <input type=\"text\" placeholder=\"Name\" class=\"namePost\" name=\"\" value=\"\">\r\n    <input type=\"text\" placeholder=\"Age\" class=\"agePost\" name=\"\" value=\"\">\r\n  </div>\r\n  <div class=\"\">\r\n    <input type=\"checkbox\" name=\"gay\" value=\"on\" calss=\"gay\">Gay\r\n  </div>\r\n\r\n  <div class=\"radiobutton\">\r\n    <input type=\"radio\" name=\"sex\" value=\"male\">Male\r\n    <input type=\"radio\" name=\"sex\" value=\"female\">Female\r\n  </div>\r\n\r\n  <div class=\"textarea\">\r\n    <textarea name=\"name\" placeholder=\"description\" rows=\"8\" cols=\"80\"></textarea>\r\n  </div>\r\n\r\n  <div class=\"dropdownMenu\">\r\n    <select class=\"dropdownx\" name=\"city\" placeholder=\"city\">\r\n      <option value=\"Brasov\">Brasov</option>\r\n      <option value=\"Cluj\">Cluj</option>\r\n      <option value=\"McLeod Ganj\">McLeod Ganj</option>\r\n      <option value=\"California\">California</option>\r\n      <option value=\"San Francisco\">San Francisco</option>\r\n\r\n    </select>\r\n  </div>\r\n  <div class=\"result\">\r\n  </div>\r\n    <script src=\"./dist/commons.js\"></script>\r\n  <script src=\"./dist/bundle.js\"></script>\r\n</body>\r\n\r\n</html>\r\n";
 
 /***/ }),
 /* 7 */
@@ -10960,6 +10960,19 @@ $(document).ready(function () {
   var aG = $(".agePost");
   var h2 = $(".h2");
   var next = $(".h3");
+  var radioBtn = $("input:radio");
+  var valRBtn;
+  var radiob = $(".radiob");
+  var gay = $("input:checkbox");
+  var gaY;
+  var textArea = $("textarea");
+  var textAr;
+  var optiune = $('.dropdownx');
+
+  radioBtn.click(function () {
+    valRBtn = $(this).val();
+  });
+
   buttOn.click(function () {
     var objAjaxR = {
       url: 'http://localhost/hugo-ui-server/generateTaskID',
@@ -11002,32 +11015,45 @@ $(document).ready(function () {
       }
     });
   });
-  var hname = "";
-  var hage;
+
   buttOn3.click(function () {
+    console.log(gay.is(':checked'), 'gay');
+    if (gay.is(':checked')) {
+      gaY = "yes";
+    } else {
+      gaY = "nO";
+    }
     var namePost = nM.val();
     console.log(namePost, "namePost");
+    var hname = "";
+    var hage;
 
     var agePost = aG.val();
     console.log(agePost, "agePost");
+    var result = '';
+    var resultObj = $('.result');
+    textAr = textArea.val();
+    var optiUne = optiune.val();
+
+    var date = {
+      name: namePost,
+      age: agePost,
+      description: textAr,
+      gay: gaY,
+      sex: valRBtn,
+      city: optiUne
+    };
+    console.log(date, "date trimise");
 
     $.ajax({
       type: "POST",
       url: 'http://localhost/hugo-ui-server/postSomething',
-      data: {
-        name: namePost,
-        age: agePost
-      },
+      data: date,
       success: function success(k) {
-        console.log(k, "success");
-        console.log(k.status, "k.status");
-        console.log(k.status.userName, "k.statususerName");
-
-        console.log(k.userName, "k.userName");
-        hname = "<h2>USERNAME: " + k.status.userName + "<h2>";
-        h2.html(hname);
-        hage = "<h2>AGE: " + k.status.userAge + "<h2>";
-        next.html(hage);
+        $.each(k.status, function (key, val) {
+          result += '<b>' + key + '</b>:' + val + '<br/>';
+        });
+        resultObj.html(result);
       },
       error: function error() {
         console.log("fail");

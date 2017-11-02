@@ -6,7 +6,26 @@ $(document).ready(function() {
   var nM = $(".namePost");
   var aG = $(".agePost");
   var h2 = $(".h2");
-var next = $(".h3");
+  var next = $(".h3");
+  var radioBtn = $("input:radio");
+  var valRBtn;
+  var radiob = $(".radiob");
+  var gay = $("input:checkbox");
+  var gaY;
+  var textArea = $("textarea");
+  var textAr;
+  var optiune = $('.dropdownx');
+
+
+
+
+
+
+
+  radioBtn.click(function() {
+    valRBtn = $(this).val();
+  });
+
   buttOn.click(function() {
     var objAjaxR = {
       url: 'http://localhost/hugo-ui-server/generateTaskID',
@@ -49,36 +68,56 @@ var next = $(".h3");
       }
     });
   });
-  var hname = "";
-  var hage;
+
   buttOn3.click(function() {
+    console.log(gay.is(':checked'),'gay');
+    if (gay.is(':checked')) {
+      gaY = "yes";
+    }else {
+        gaY= "nO";
+    }
     var namePost = nM.val();
     console.log(namePost, "namePost");
+    var hname = "";
+    var hage;
 
     var agePost = aG.val();
     console.log(agePost, "agePost");
+    var result = '';
+    var resultObj = $('.result');
+    textAr = textArea.val();
+    var optiUne = optiune.val();
+
+    var date = {
+      name: namePost,
+      age: agePost,
+      description: textAr,
+      gay: gaY,
+      sex: valRBtn,
+      city: optiUne,
+    };
+    console.log(date, "date trimise");
 
     $.ajax({
       type: "POST",
       url: 'http://localhost/hugo-ui-server/postSomething',
-      data: {
-        name: namePost,
-        age: agePost,
-      },
+      data: date,
       success: function(k) {
-        console.log(k, "success");
-        console.log(k.status, "k.status");
-        console.log(k.status.userName, "k.statususerName");
+        $.each(k.status, function(key, val) {
+          result += '<b>' + key + '</b>:' + val + '<br/>';
+        });
+        resultObj.html(result);
 
-        console.log(k.userName, "k.userName");
-        hname = "<h2>USERNAME: " + k.status.userName + "<h2>";
-        h2.html(hname);
-        hage =  "<h2>AGE: " + k.status.userAge + "<h2>"
-        next.html(hage);
+
       },
       error: function() {
         console.log("fail");
       },
     });
+
+
+
+
+
   });
 });
