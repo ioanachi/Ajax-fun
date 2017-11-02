@@ -10733,7 +10733,7 @@ __webpack_require__(16);
 /* 6 */
 /***/ (function(module, exports) {
 
-module.exports = "<!DOCTYPE html>\r\n<html>\r\n\r\n<head>\r\n  <meta charset=\"utf-8\">\r\n  <title>Second Layout</title>\r\n</head>\r\n\r\n<body>\r\n  <div class=\"container\">\r\n\r\n  </div>\r\n  <div>\r\n    <button class=\"Brequest\"> Request</button>\r\n  </div>\r\n  <div>\r\n    <button class=\"Srequest\">Second Request</button>\r\n  </div>\r\n\r\n  <script src=\"./dist/commons.js\"></script>\r\n  <script src=\"./dist/bundle.js\"></script>\r\n</body>\r\n\r\n</html>\r\n";
+module.exports = "<!DOCTYPE html>\r\n<html>\r\n\r\n<head>\r\n  <meta charset=\"utf-8\">\r\n  <title>Second Layout</title>\r\n</head>\r\n\r\n<body>\r\n  <div class=\"container\">\r\n<ul class=\"ullist\">\r\n\r\n</ul>\r\n  </div>\r\n  <div>\r\n    <button class=\"Brequest\"> Request</button>\r\n  </div>\r\n  <div>\r\n    <button class=\"Srequest\">Second Request</button>\r\n  </div>\r\n  <div>\r\n    <button class=\"aPost\">Post something</button>\r\n  </div>\r\n  <div >\r\n    <input type=\"text\" placeholder=\"Name\" class=\"namePost\" name=\"\" value=\"\">\r\n    <input type=\"text\" placeholder=\"Age\" class=\"agePost\" name=\"\" value=\"\">\r\n  </div>\r\n  <div class=\"h2\">\r\n  </div>\r\n<div class=\"h3\">\r\n\r\n</div>\r\n  <script src=\"./dist/commons.js\"></script>\r\n  <script src=\"./dist/bundle.js\"></script>\r\n</body>\r\n\r\n</html>\r\n";
 
 /***/ }),
 /* 7 */
@@ -10955,7 +10955,11 @@ var $ = __webpack_require__(3);
 $(document).ready(function () {
   var buttOn = $(".Brequest");
   var buttOn2 = $(".Srequest");
-
+  var buttOn3 = $(".aPost");
+  var nM = $(".namePost");
+  var aG = $(".agePost");
+  var h2 = $(".h2");
+  var next = $(".h3");
   buttOn.click(function () {
     var objAjaxR = {
       url: 'http://localhost/hugo-ui-server/generateTaskID',
@@ -10980,14 +10984,53 @@ $(document).ready(function () {
       type: "GET",
       success: function success(response) {
         console.log(response, "response");
-        var iD2 = response.users;
-        var h22 = "<h2>Id:" + iD2 + "</h2>";
-        console.log(h22, "h2");
-
+        var naMe = response.users;
+        console.log(naMe, "naMe.length");
+        console.log(naMe.length, "naMe.length");
+        var h22 = '';
+        naMe.forEach(function (i) {
+          h22 += "<li>Name:" + i + "</li>";
+        });
+        // for (var i = 0; i < naMe.length; i++) {
+        //   h22 += "<li>Name:" + naMe[i] + "</li>";
+        //   console.log(h22, "name");
+        // }
         $(".container").html(h22);
       },
       error: function error(xhr) {
         console.log(xhr, "xhr");
+      }
+    });
+  });
+  var hname = "";
+  var hage;
+  buttOn3.click(function () {
+    var namePost = nM.val();
+    console.log(namePost, "namePost");
+
+    var agePost = aG.val();
+    console.log(agePost, "agePost");
+
+    $.ajax({
+      type: "POST",
+      url: 'http://localhost/hugo-ui-server/postSomething',
+      data: {
+        name: namePost,
+        age: agePost
+      },
+      success: function success(k) {
+        console.log(k, "success");
+        console.log(k.status, "k.status");
+        console.log(k.status.userName, "k.statususerName");
+
+        console.log(k.userName, "k.userName");
+        hname = "<h2>USERNAME: " + k.status.userName + "<h2>";
+        h2.html(hname);
+        hage = "<h2>AGE: " + k.status.userAge + "<h2>";
+        next.html(hage);
+      },
+      error: function error() {
+        console.log("fail");
       }
     });
   });
